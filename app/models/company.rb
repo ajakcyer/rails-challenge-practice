@@ -6,10 +6,10 @@ class Company < ApplicationRecord
     validates :name, presence: true
 
     accepts_nested_attributes_for :offices
+    accepts_nested_attributes_for :employees
 
-    # def offices_attributes=(office_attributes)
-    #     byebug
-    #     office_attributes.values.each do |attribute|
+    # def buildings_attributes=(building_attributes)
+    #     building_attributes.values.each do |attribute|
     #         Building.find(attribute[:id])
     #     end
     # end

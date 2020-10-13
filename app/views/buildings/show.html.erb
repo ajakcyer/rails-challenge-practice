@@ -5,9 +5,11 @@
 
 <h3>Companies in <%= @building.name %>:</h3>
 <ul>
-    <% @building.companies.each do |company| %>
+    <% @building.companies.uniq.each do |company| %>
         <li><%= link_to company.name, company_path(company) %></li>
     <% end %>
 </ul><br>
 
 <p><b>Total Rent:</b> <%= @building.offices.count * @building.rent_per_floor %></p>
+
+<p><%= link_to 'click here', edit_building_path(@building) %> to update building info</p>

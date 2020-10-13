@@ -8,11 +8,26 @@ class CompaniesController < ApplicationController
         @company = Company.new
     end
 
+
     def create
         byebug
-        company = Company.create(company_params)
+        company = Company.new(company_params)
 
-        if company.valid?
+        if company.save
+            params[:company][:offices_attributes].each do |key, building_data|
+                building = Building.find(building_data[:id])
+
+                if building
+                    floors = building_data[:offices]
+
+                    floors.each do |floor|
+                        if !floor.empty?
+                            Office.create!(building: building, company: company, floor: floor)
+                        end
+                    end
+                end
+
+            end
             redirect_to company_path(company)
         else
             flash[:my_errors] = company.errors.full_messages
@@ -20,9 +35,10 @@ class CompaniesController < ApplicationController
         end
     end
 
+
     private
 
     def company_params
-        params.require(:company).permit(:name, offices_attributes: [:id, offices: []])
+        params.require(:company).permit(:name)
     end
 end

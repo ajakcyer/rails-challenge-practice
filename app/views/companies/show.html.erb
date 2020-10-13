@@ -1,1 +1,17 @@
 <h1><%= @company.name %></h1>
+
+<ul>
+    <% @company.offices.each do |office| %>
+        <li>Located at <%= office.building.name %> on floor: <%= office.floor %></li><br>
+    <% end %>
+</ul>
+
+<h3>Employees:</h3>
+<ul>
+    <% @company.employees.each do |employee| %>
+        <li><%= employee.name %> - <%= employee.title %></li>
+    <% end %>
+</ul>
+
+
+building cost of rent per floor * number of floors
