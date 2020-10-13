@@ -1,0 +1,12 @@
+<h1>WeWork Buildings</h1>
+
+
+<% @buildings.each do |building| %>
+    <h2><%= link_to building.name, building_path(building) %></h2>
+    <p>Floors Available For Rent</p>
+    <ul>
+        <% building.number_of_floors_available.each do |floor| %>
+            <li><%= floor %></li>
+        <% end %>
+    </ul><hr>
+<% end %>
