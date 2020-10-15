@@ -8,6 +8,26 @@ class CompaniesController < ApplicationController
         @company = Company.new
     end
 
+    def new_employee
+        @company = Company.find(params[:id])
+        employee = @company.employees.build(name: params[:company][:employee][:name], title: params[:company][:employee][:title], company_id: params[:company][:employee][:company_id])
+
+        if employee.save
+            redirect_to company_path(@company)
+        else
+            flash[:my_employee_errors] = employee.errors.full_messages
+            redirect_to company_path(@company)
+        end
+    end
+
+    def delete_employee
+        employee = Employee.find(params[:company][:employee_ids])
+        company = employee.company
+        flash[:delete_message] = "#{employee.name} successfully deleted!"
+        employee.delete
+        redirect_to company_path(company)
+    end
+
 
     def create
         byebug
@@ -41,4 +61,8 @@ class CompaniesController < ApplicationController
     def company_params
         params.require(:company).permit(:name)
     end
+
+    # def employee_params
+    #     params.require(:company).permit(employees:[:name, :title, :company_id])
+    # end
 end

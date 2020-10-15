@@ -10,6 +10,6 @@
     <% end %>
 </ul><br>
 
-<p><b>Total Rent:</b> <%= @building.offices.count * @building.rent_per_floor %></p>
+<p><b>Total Rent to Collect:</b> $<%= @building.offices.count * @building.rent_per_floor %></p>
 
 <p><%= link_to 'click here', edit_building_path(@building) %> to update building info</p>

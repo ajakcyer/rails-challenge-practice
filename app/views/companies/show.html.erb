@@ -1,10 +1,29 @@
 <h1><%= @company.name %></h1>
+<% costs = @company.buildings.map {|building| building.rent_per_floor} %>
+<p><b>Total Rent Per Month: $</b><%= costs.sum %></p>
+<hr>
 
+<p><b>Offices located at: </b></p>
 <ul>
     <% @company.offices.each do |office| %>
-        <li>Located at <%= office.building.name %> on floor: <%= office.floor %></li><br>
+        <li><%= office.building.name %> on the
+            <% if office.floor.to_s.ends_with?("1") %>
+                <%= office.floor %>st
+            <% elsif office.floor.to_s.ends_with?("2") %>
+                <%= office.floor %>nd
+            <% elsif office.floor.to_s.ends_with?("3") %>
+                <%= office.floor %>rd
+            <% else %>
+                <%= office.floor %>th
+            <% end %> floor.</li><br>
     <% end %>
 </ul>
+
+<hr>
+<% if flash[:delete_message] %>
+  <p><b><%= flash[:delete_message] %></b></p><br>
+<% end %>
+
 
 <h3>Employees:</h3>
 <ul>
@@ -12,6 +31,32 @@
         <li><%= employee.name %> - <%= employee.title %></li>
     <% end %>
 </ul>
+<hr>
+
+<h3>Add New Employee</h3>
+<% if flash[:my_employee_errors] %>
+    <% flash[:my_employee_errors].each do |error| %>
+        <p><%= error %></p>
+    <% end %>
+<% end %>
+
+<%= form_tag url: new_company_employee_path(@company), method: :post do %>
+
+        <%= label_tag :name, "Full Name" %><br>
+        <%= text_field_tag :'company[employee][name]' %><br><br>
+
+        <%= label_tag :title %><br>
+        <%= text_field_tag :'company[employee][title]' %><br><br>
+
+        <%= hidden_field_tag :'company[employee][company_id]', @company.id %>
+    <%= submit_tag "Add Employee", name: :add_employee %>
+<% end %>
+<hr>
+
+<h3>Delete An Employee</h3>
 
 
-building cost of rent per floor * number of floors
+<%= form_for @company, url: delete_company_employee_path, method: :delete do |f| %>
+    <%= f.collection_select :employee_ids, @company.employees, :id, :name, {include_blank: 'Select an Employee', selected: 'Select an Employee'} %><br><br>
+    <%= f.submit "Delete Employee" %>
+<% end %>
